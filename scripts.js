@@ -182,13 +182,16 @@ function displayProperties() {
       property.price.includes("₪") &&
       property.price.includes("₪") &&
       property.price.match(/^\d{1,4}(,\d{3})?(?!\d) ₪/);
+
     const propertyTag = isRental
       ? '<div class="property-tag tag-rent">להשכרה</div>'
       : '<div class="property-tag tag-sale">למכירה</div>';
 
+    const cardClass = isRental ? "rent-property" : "sale-property";
+
     const propertyCard = `
             <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                <div class="card property-card">
+                <div class="card property-card ${cardClass}">
                     ${propertyTag}
                     <div class="property-number">${propertyNumber}/${
       properties.length
@@ -268,6 +271,34 @@ function startRotation() {
     updateTimer(timeLeft);
   }, 1000);
 }
+
+function updateClock() {
+  const clockElement = document.getElementById("digital-clock");
+  const dateElement = document.getElementById("current-date");
+
+  const now = new Date();
+
+  // עדכון השעה
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+  clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+
+  // עדכון התאריך
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  dateElement.textContent = now.toLocaleDateString("he-IL", options);
+}
+
+// הפעלת השעון בטעינת הדף
+document.addEventListener("DOMContentLoaded", () => {
+  updateClock(); // עדכון ראשוני
+  setInterval(updateClock, 1000); // עדכון כל שנייה
+  startRotation(); // הפונקציה הקיימת שלך
+});
 
 // הפעלה בטעינת הדף
 document.addEventListener("DOMContentLoaded", startRotation);
