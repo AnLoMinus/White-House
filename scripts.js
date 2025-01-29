@@ -83,6 +83,43 @@ const properties = [
     image:
       "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=500&q=60",
   },
+  {
+    id: 8,
+    title: "חנות/מחסן להשכרה",
+    address: "רח' דב הוז",
+    price: "3,700 ₪",
+    size: "30",
+    rooms: "",
+    floor: "",
+    description: "מסודרת, כניסה מיידית",
+    image:
+      "https://images.unsplash.com/photo-1582657233895-0f37a3f150c0?auto=format&fit=crop&w=500&q=60",
+  },
+  {
+    id: 9,
+    title: "דירת 3 חדרים להשכרה",
+    address: "רח' קפאח",
+    price: "4,800 ₪",
+    size: "70",
+    rooms: "3",
+    floor: "",
+    description: "כניסה מיידית",
+    image:
+      "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=500&q=60",
+  },
+  {
+    id: 10,
+    title: "יחידת דיור קרקע להשכרה",
+    address: "רח' דובנוב",
+    price: "3,000 ₪",
+    size: "",
+    rooms: "",
+    floor: "קרקע",
+    description:
+      "יחידת דיור קרקע חמודה, מרוהטת כולל אינטרנט וכבלים, כניסה מיידית",
+    image:
+      "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=500&q=60",
+  },
 ];
 
 function displayProperties() {
