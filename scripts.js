@@ -8,6 +8,11 @@ const properties = [
     rooms: "3",
     floor: "",
     description: 'מרפסת שמש 8 מ"ר + מעלית חניה וממ"ד',
+    images: [
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=500&q=60",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=500&q=60",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=500&q=60",
+    ],
     image:
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=500&q=60",
   },
@@ -167,15 +172,50 @@ let timeLeft = 20;
 
 function displayProperties() {
   const container = document.getElementById("properties-container");
-  container.innerHTML = ""; // ניקוי התצוגה הקיימת
+  container.innerHTML = "";
 
   const startIndex = currentPage * propertiesPerPage;
   const endIndex = Math.min(startIndex + propertiesPerPage, properties.length);
-  const totalPages = Math.ceil(properties.length / propertiesPerPage);
 
   for (let i = startIndex; i < endIndex; i++) {
     const property = properties[i];
     const propertyNumber = i + 1;
+
+    // בדיקה אם יש מערך תמונות או תמונה בודדת
+    const images = property.images || [property.image];
+    const imagesHTML = images
+      .map(
+        (img, index) => `
+      <img src="${img}" 
+        class="property-image ${index === 0 ? "active" : ""}" 
+        alt="${property.title} - תמונה ${index + 1}"
+        data-index="${index}">
+    `
+      )
+      .join("");
+
+    const dotsHTML =
+      images.length > 1
+        ? `
+      <div class="image-navigation">
+        ${images
+          .map(
+            (_, index) => `
+          <div class="image-dot ${index === 0 ? "active" : ""}" 
+            data-index="${index}"></div>
+        `
+          )
+          .join("")}
+      </div>
+    `
+        : "";
+
+    const imageCounterHTML =
+      images.length > 1
+        ? `
+      <div class="image-counter">1/${images.length}</div>
+    `
+        : "";
 
     // בדיקה משופרת אם הנכס להשכרה או למכירה לפי המחיר
     const isRental =
@@ -190,49 +230,50 @@ function displayProperties() {
     const cardClass = isRental ? "rent-property" : "sale-property";
 
     const propertyCard = `
-            <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                <div class="card property-card ${cardClass}">
-                    ${propertyTag}
-                    <div class="property-number">${propertyNumber}/${
+      <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+        <div class="card property-card ${cardClass}">
+          ${propertyTag}
+          <div class="property-number">${propertyNumber}/${
       properties.length
     }</div>
-                    <img src="${property.image}" class="card-img-top" alt="${
-      property.title
-    }">
-                    <div class="card-body">
-                        <h5 class="card-title">🏠 ${property.title}</h5>
-                        <div class="property-info-grid">
-                            <div class="info-row">
-                                <div class="info-item">📍 <strong>כתובת:</strong> ${
-                                  property.address
-                                }</div>
-                                <div class="info-item price">💰 ${
-                                  property.price
-                                }</div>
-                            </div>
-                            <div class="info-row">
-                                <div class="info-item">📐 <strong>שטח:</strong> ${
-                                  property.size
-                                    ? property.size + ' מ"ר'
-                                    : "לא צוין"
-                                }</div>
-                                <div class="info-item">🚪 <strong>חדרים:</strong> ${
-                                  property.rooms || "לא צוין"
-                                }</div>
-                            </div>
-                            <div class="info-row last-row">
-                                <div class="info-item">⬆️ <strong>קומה:</strong> ${
-                                  property.floor || "לא צוין"
-                                }</div>
-                            </div>
-                        </div>
-                        <p class="description">📝 ${property.description}</p>
-                    </div>
-                </div>
+          <div class="property-images" data-property-id="${property.id}">
+            ${imagesHTML}
+            ${dotsHTML}
+            ${imageCounterHTML}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">🏠 ${property.title}</h5>
+            <div class="property-info-grid">
+              <div class="info-row">
+                <div class="info-item">📍 <strong>כתובת:</strong> ${
+                  property.address
+                }</div>
+                <div class="info-item price">💰 ${property.price}</div>
+              </div>
+              <div class="info-row">
+                <div class="info-item">📐 <strong>שטח:</strong> ${
+                  property.size ? property.size + ' מ"ר' : "לא צוין"
+                }</div>
+                <div class="info-item">🚪 <strong>חדרים:</strong> ${
+                  property.rooms || "לא צוין"
+                }</div>
+              </div>
+              <div class="info-row last-row">
+                <div class="info-item">⬆️ <strong>קומה:</strong> ${
+                  property.floor || "לא צוין"
+                }</div>
+              </div>
             </div>
-        `;
+            <p class="description">📝 ${property.description}</p>
+          </div>
+        </div>
+      </div>
+    `;
     container.innerHTML += propertyCard;
   }
+
+  // הפעלת החלפת התמונות האוטומטית לכל הנכסים
+  startImageRotation();
 }
 
 function updateTimer(timeLeft) {
@@ -302,3 +343,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // הפעלה בטעינת הדף
 document.addEventListener("DOMContentLoaded", startRotation);
+
+function startImageRotation() {
+  const propertyContainers = document.querySelectorAll(".property-images");
+
+  propertyContainers.forEach((container) => {
+    let currentIndex = 0;
+    const images = container.querySelectorAll(".property-image");
+    const dots = container.querySelectorAll(".image-dot");
+    const counter = container.querySelector(".image-counter");
+
+    if (images.length <= 1) return;
+
+    // הוספת מאזיני לחיצה לנקודות
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        showImage(index);
+      });
+    });
+
+    function showImage(index) {
+      images.forEach((img) => img.classList.remove("active"));
+      dots.forEach((dot) => dot.classList.remove("active"));
+
+      images[index].classList.add("active");
+      dots[index].classList.add("active");
+      if (counter) {
+        counter.textContent = `${index + 1}/${images.length}`;
+      }
+
+      currentIndex = index;
+    }
+
+    // החלפת תמונות אוטומטית
+    setInterval(() => {
+      const nextIndex = (currentIndex + 1) % images.length;
+      showImage(nextIndex);
+    }, 3000);
+  });
+}
