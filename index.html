@@ -7,20 +7,56 @@
     <title>White House - נכסים</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
-    <script>
-        // רענון העמוד כל 15 שניות
-        setTimeout(function () {
-            window.location.reload();
-        }, 15000); // 15000 מילישניות = 15 שניות
-    </script>
 </head>
 
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <h1>White House</h1>
-            </a>
+            <div class="navbar-sections">
+                <!-- Section 1: Phone numbers -->
+                <div class="phone-numbers">
+                    <div class="phone-item">
+                        <span class="flag">🇮🇱</span>
+                        <div class="contact-info">
+                            <span class="agent-name">בנימין</span>
+                            <a href="tel:054-444-6375" class="phone-link">054-444-6375</a>
+                        </div>
+                    </div>
+                    <div class="phone-item">
+                        <span class="flag">🇺🇸 🇮🇱 🇷🇺</span>
+                        <div class="contact-info">
+                            <span class="agent-name">לאון</span>
+                            <a href="tel:054-328-5967" class="phone-link">054-328-5967</a>
+                        </div>
+                    </div>
+                    <div class="phone-item">
+                        <span class="flag">🇷🇺 🇮🇱</span>
+                        <div class="contact-info">
+                            <span class="agent-name">רפאל</span>
+                            <a href="tel:050-899-7125" class="phone-link">050-899-7125</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Logo -->
+                <div class="logo-section">
+                    <a class="navbar-brand" href="#">
+                        <h1>White House</h1>
+                    </a>
+                </div>
+
+                <!-- Section 3: Timer -->
+                <div class="timer-container">
+                    <button class="nav-button" onclick="navigateProperties(-1)">▶️</button>
+                    <div id="timer" class="timer">0:20</div>
+                    <button class="nav-button" onclick="navigateProperties(1)">◀️</button>
+                </div>
+
+                <!-- Section 4: Website URL -->
+                <div class="website-url">
+                    <span class="url-text">https://anlominus.github.io/White-House</span>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -32,7 +68,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="scripts.js"></script>
-    <script src="refresh.js"></script>
 </body>
 
 </html>

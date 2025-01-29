@@ -120,15 +120,79 @@ const properties = [
     image:
       "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=500&q=60",
   },
+  {
+    id: 11,
+    title: "דירת גג - 4 חדרים",
+    address: "רח' הפורצים",
+    price: "2,400,000 ₪",
+    size: "120",
+    rooms: "4",
+    floor: "2",
+    description: "קומה 2, חניה גדולה בטאבו, 3 כיווני אוויר",
+    image:
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=500&q=60",
+  },
+  {
+    id: 12,
+    title: "דירת 3.5 חדרים",
+    address: "שכ' תל גיבורים",
+    price: "1,900,000 ₪",
+    size: "",
+    rooms: "3.5",
+    floor: "",
+    description: "חזית + חצר קדמית ואחורית",
+    image:
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=500&q=60",
+  },
+  {
+    id: 13,
+    title: "בעל/ת עסק?",
+    address: "",
+    price: "",
+    size: "",
+    rooms: "",
+    floor: "",
+    description:
+      "נשמח לעזור לך להשכיר את הנכס בהצעה משתלמת במיוחד! פרטים במשרד",
+    image:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=500&q=60",
+  },
 ];
+
+let currentPage = 0;
+const propertiesPerPage = 4;
+
+// הגדרת משתנה גלובלי לטיימר
+let timeLeft = 20;
 
 function displayProperties() {
   const container = document.getElementById("properties-container");
+  container.innerHTML = ""; // ניקוי התצוגה הקיימת
 
-  properties.forEach((property) => {
+  const startIndex = currentPage * propertiesPerPage;
+  const endIndex = Math.min(startIndex + propertiesPerPage, properties.length);
+  const totalPages = Math.ceil(properties.length / propertiesPerPage);
+
+  for (let i = startIndex; i < endIndex; i++) {
+    const property = properties[i];
+    const propertyNumber = i + 1;
+
+    // בדיקה משופרת אם הנכס להשכרה או למכירה לפי המחיר
+    const isRental =
+      property.price.includes("₪") &&
+      property.price.includes("₪") &&
+      property.price.match(/^\d{1,4}(,\d{3})?(?!\d) ₪/);
+    const propertyTag = isRental
+      ? '<div class="property-tag tag-rent">להשכרה</div>'
+      : '<div class="property-tag tag-sale">למכירה</div>';
+
     const propertyCard = `
             <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                 <div class="card property-card">
+                    ${propertyTag}
+                    <div class="property-number">${propertyNumber}/${
+      properties.length
+    }</div>
                     <img src="${property.image}" class="card-img-top" alt="${
       property.title
     }">
@@ -165,8 +229,45 @@ function displayProperties() {
             </div>
         `;
     container.innerHTML += propertyCard;
-  });
+  }
 }
 
-// הצג את הנכסים כשהדף נטען
-document.addEventListener("DOMContentLoaded", displayProperties);
+function updateTimer(timeLeft) {
+  const timerElement = document.getElementById("timer");
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  timerElement.textContent = `${minutes}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
+}
+
+function navigateProperties(direction) {
+  // איפוס הטיימר
+  timeLeft = 20;
+
+  // חישוב העמוד הבא
+  const totalPages = Math.ceil(properties.length / propertiesPerPage);
+  currentPage = (currentPage + direction + totalPages) % totalPages;
+
+  // הצגת הנכסים החדשים
+  displayProperties();
+}
+
+function startRotation() {
+  displayProperties();
+
+  // עדכון ראשוני של הטיימר
+  updateTimer(timeLeft);
+
+  setInterval(() => {
+    timeLeft--;
+    if (timeLeft < 0) {
+      timeLeft = 20;
+      navigateProperties(1);
+    }
+    updateTimer(timeLeft);
+  }, 1000);
+}
+
+// הפעלה בטעינת הדף
+document.addEventListener("DOMContentLoaded", startRotation);
