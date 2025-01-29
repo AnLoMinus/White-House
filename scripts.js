@@ -127,27 +127,37 @@ function displayProperties() {
 
   properties.forEach((property) => {
     const propertyCard = `
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                 <div class="card property-card">
                     <img src="${property.image}" class="card-img-top" alt="${
       property.title
     }">
                     <div class="card-body">
                         <h5 class="card-title">🏠 ${property.title}</h5>
-                        <div class="property-info">
-                            <p class="mb-2">📍 <strong>כתובת:</strong> ${
-                              property.address
-                            }</p>
-                            <p class="price mb-2">💰 ${property.price}</p>
-                            <p class="mb-2">📐 <strong>שטח:</strong> ${
-                              property.size ? property.size + ' מ"ר' : "לא צוין"
-                            }</p>
-                            <p class="mb-2">🚪 <strong>חדרים:</strong> ${
-                              property.rooms
-                            }</p>
-                            <p class="mb-2">⬆️ <strong>קומה:</strong> ${
-                              property.floor || "לא צוין"
-                            }</p>
+                        <div class="property-info-grid">
+                            <div class="info-row">
+                                <div class="info-item">📍 <strong>כתובת:</strong> ${
+                                  property.address
+                                }</div>
+                                <div class="info-item price">💰 ${
+                                  property.price
+                                }</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-item">📐 <strong>שטח:</strong> ${
+                                  property.size
+                                    ? property.size + ' מ"ר'
+                                    : "לא צוין"
+                                }</div>
+                                <div class="info-item">🚪 <strong>חדרים:</strong> ${
+                                  property.rooms || "לא צוין"
+                                }</div>
+                            </div>
+                            <div class="info-row last-row">
+                                <div class="info-item">⬆️ <strong>קומה:</strong> ${
+                                  property.floor || "לא צוין"
+                                }</div>
+                            </div>
                         </div>
                         <p class="description">📝 ${property.description}</p>
                     </div>
